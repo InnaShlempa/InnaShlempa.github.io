@@ -59,7 +59,7 @@ class Users {
         return random;
     }
 	
-	
+
 	setGender(element) {
 			if (element.gender === 'male') {
 				this.userMan.push(element);// если мужской пол, то добавляем элементы в масив userMan
