@@ -1,0 +1,209 @@
+body {
+    background: #dfe6ff;
+    font-size: 16px;
+	overflow-x: hidden;
+	margin: 0;
+    padding: 0;
+}
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+
+.preload{
+	display: block;
+	position: fixed;
+	z-index: 10;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(http://hello-site.ru//main/images/preloads/spinning-circles.svg) center center no-repeat;
+	background-size:50px;
+}
+
+.container {
+	max-width: 1420px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.start-load{
+    display: flex;
+    justify-content: center;
+}
+.users{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+.user {
+	min-width: 200px;
+	max-width: 300px;
+	width: 100%;
+    overflow: hidden;
+    margin: 15px 10px;
+    font-weight: 600;
+}
+.user__wrapper{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 300ms ease;
+  align-items: center;
+  padding: 10px 20px;
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2);
+  background-color: #FDF5E6;
+}
+
+.user:hover {
+  box-shadow: 0 8px 20px 0 rgba(0,0,0,0.2);
+}
+.user__img {
+  border-radius: 15%;
+  overflow: hidden;
+  max-width: 180px;
+  width: 100%;
+}
+.user__img:hover{
+	transform: scale(1.05);
+}
+.user__picture {
+  width: 100%;
+}
+.user__info{
+  padding: 5px 20px;
+  width: 100%;
+}
+.user__name{
+  font-weight: 600;
+  text-align: center;
+}
+.user__gender{
+  font-weight: 300;
+  text-align: center;
+  padding: 5px;
+}
+.user__phone{
+  text-align: center;
+  padding: 5px;
+}
+.user__email{
+  font-style: oblique;
+  text-align: right;
+  font-weight: 300;
+}
+.user__email:hover{
+	text-decoration:underline;
+	cursor: pointer;
+}
+.user__address{
+  font-size: 12px;
+  text-align: left;
+  padding: 10px;
+}
+
+.user__birthday{
+  font-weight: 300;
+  font-size: 15px;
+ 
+}
+.user__registration{
+  font-weight: 300;
+  font-size: 15px;
+}
+.users__stats {
+    width: 100%;
+    color: #000000;
+    background-color: #dfe6ff;
+    padding: 0;
+	margin:0;
+    font-weight: 500;
+    border-radius: 10px;
+	height: 100%;
+	text-align:center;
+}
+.stats_users{
+	font-weight: 600;
+	font-size: 25px;
+	font-weight:bold;
+}
+
+.button {
+    top: 50%;
+    left: 50%;
+	padding: 0 20px;
+    height: 60px;
+    transform: translate(-50%, -50%);
+    outline: none;
+    width: auto;
+    font-size: 20px;
+    font-weight: 400;
+    background-color: #1067A1;
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    position: absolute;
+	z-index:2;
+}
+.button:hover{
+	box-shadow: 3px 8px 12px .50px rgba(10, 73, 115, .45);
+}
+.button.preload {
+    animation: load 1s forwards;
+	box-shadow: none;
+	background-color: #81CFE0;
+}
+.button.load-end {
+    opacity: 0;
+}
+.button.load::before {
+    opacity: 1;
+    animation: spin 7s infinite ease;
+}
+.button.error {
+   background-color: rgb(202, 51, 51);
+   animation: load 1s reverse;
+}
+
+.button.error::before {
+    transition: 1s;
+    opacity: 0;
+}
+.button::before {
+    content: '';
+    position: absolute;
+	z-index:3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    border: 4px solid #ffffff;
+    border-right-color: transparent;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+
+@keyframes load {
+    0% {
+        font-size: 0;
+        width: 150px;
+    }
+    10% {
+        border-radius: 50%;
+        font-size: 0;
+        width: 60px;
+    }
+    100% {
+        border-radius: 50%;
+        font-size: 0;
+        width: 60px;
+    }
+}
+
+
+
