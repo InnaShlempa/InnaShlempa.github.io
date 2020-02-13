@@ -37,7 +37,7 @@ class Users {
                     this.initGrid(this.array);                                    
                 }, 2000)
             })
-			.catch(() => this.preloader(false, 'error'));//если ошибка,то прелоадер
+			.catch(() => this.preloader(false, 'error'));
         })
     }
 	
