@@ -59,7 +59,7 @@ class Users {
         return random;
     }
 	
-
+	
 	setGender(element) {
 			if (element.gender === 'male') {
 				this.userMan.push(element);// если мужской пол, то добавляем элементы в масив userMan
@@ -123,16 +123,16 @@ class Users {
             this.setGender(element);
 			
 				//определяем количество пользователей с каждой страны
-            if (!userNat.includes(element.nat)) { 
-                userNat.push(element.nat);
-                userNatLenght = user.filter(item => item.nat === element.nat);
+            if (!userNat.includes(element.)) {//определяем содержит ли массив элемент nat
+                userNat.push(element.nat);//добавляем в масив
+                userNatLenght = user.filter(item => item.nat === element.nat);//фильтруем массив - 'user' и возвращает только тех пользователей, у которых есть свойство 'nat' со значение 'true', записывая в новый масив
                 listNat += `
 								<div class='users__stats'> ${userNat[indexNat++] + ` - ` + userNatLenght.length} users</div>
 								`;
             }
         });
 		
-		//сравнение кого больше мужчин или женщмн
+		//сравнение кого больше мужчин или женщин
 		let compareGender;
         if (this.userMan.length === this.userWoman.length) { // если длина масив userMan = длине масива userWoman, то равное количество
             compareGender = 'Amount of men and women is equal';
