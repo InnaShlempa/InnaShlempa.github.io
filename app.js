@@ -37,7 +37,7 @@ class Users {
                     this.initGrid(this.array);                                    
                 }, 2000)
             })
-			.catch(() => this.preloader(false, 'error'));
+			.catch(() => this.preloader(false, 'error'));//если ошибка,то прелоадер
         })
     }
 	
@@ -123,16 +123,16 @@ class Users {
             this.setGender(element);
 			
 				//определяем количество пользователей с каждой страны
-            if (!userNat.includes(element.)) {//определяем содержит ли массив элемент nat
-                userNat.push(element.nat);//добавляем в масив
-                userNatLenght = user.filter(item => item.nat === element.nat);//фильтруем массив - 'user' и возвращает только тех пользователей, у которых есть свойство 'nat' со значение 'true', записывая в новый масив
+            if (!userNat.includes(element.nat)) { 
+                userNat.push(element.nat);
+                userNatLenght = user.filter(item => item.nat === element.nat);
                 listNat += `
 								<div class='users__stats'> ${userNat[indexNat++] + ` - ` + userNatLenght.length} users</div>
 								`;
             }
         });
 		
-		//сравнение кого больше мужчин или женщин
+		//сравнение кого больше мужчин или женщмн
 		let compareGender;
         if (this.userMan.length === this.userWoman.length) { // если длина масив userMan = длине масива userWoman, то равное количество
             compareGender = 'Amount of men and women is equal';
