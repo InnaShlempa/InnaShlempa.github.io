@@ -17,8 +17,8 @@ class Users {
 			/*конвертируем получение данные с помощью метода response.json в json, 
 			этот метод возвращает promise, который, когда получен ответ, 
 			вызывает коллбэк с результатом парсинга ответа в json.  */
-				.then(response => {//если все ок, то 
-					if (response.ok) { 
+				.then(response => {
+					if (response.ok) { //если все ок, то 
 					 response.json()
 						.then(response => {//преобразовуем данные с json формата  в объект и дальше работаем уже как с объектом
 						this.array = response.results;
@@ -37,13 +37,13 @@ class Users {
                     this.initGrid(this.array);                                    
                 }, 2000)
             })
-			.catch(() => this.preloader(false, 'error'));//если ошибка,то прелоадер
+			.catch(() => this.preloader(false, 'error'));//если ошибка,то на прелоадер вешаем класс error
         })
     }
 	
 	preloader(state, type) {
 			if (state) {
-				this.$button.addClass('preload');
+				this.$button.addClass('preload');//на кнопку вешаем класс preload
 			} else {
 				this.$button.addClass(type);
 			}
@@ -61,25 +61,26 @@ class Users {
 	
 	
 	setGender(element) {
-			if (element.gender === 'male') {
-				this.userMan.push(element);// если мужской пол, то добавляем элементы в масив userMan
+			if (element.gender === 'female') {
+				this.userWoman.push(element);// если это женский  пол, то добавляем элементы в масив userWoman
 			} else  {
-				this.userWoman.push(element)//если все другой, то в userWoman
+				this.userMan.push(element)//если не женский пол, то в userMan
 			}
 		}
-		//стоим сетку профилей пользователей
-    initGrid(user) {
-        let userGrid = []; //масив, который хранит сетку профилей пользователей
-        let list = '';
-
-        let userNat = [];  //национальности пользователей
-        let userNatLenght = [];//сколько пользоватей с одной страны
 		
-        let listNat = '';
+	//стоим сетку профилей пользователей
+    initGrid(user) {
+        let userGrid = []; //инициализируем переменную, содержащую масив, который хранит сетку профилей пользователей
+        let list = '';//инициализируем переменную, содержащую строку, в которой хранится разметка html профиля и выражения,обернутые в ${…}
+
+        let userNat = [];  //инициализируем переменную, содержащую масив национальности пользователей
+        let userNatLenght = [];//инициализируем переменную, содержащую масив  пользоватей с одной страны
+		
+        let listNat = '';//инициализируем переменную, содержащую строку, в которой хранится список национальностей
         let indexNat = 0;
         
-        this.userMan = []; //мужчины
-        this.userWoman = []; //женщины
+        this.userMan = []; //инициализируем переменную, содержащую масив мужчины
+        this.userWoman = []; //инициализируем переменную, содержащую масив женщины
 
         user.forEach((element) => { //с помощью метод forEach() стоим сетку профилей пользователей
             list += `
@@ -122,13 +123,13 @@ class Users {
 
             this.setGender(element);
 			
-				//определяем количество пользователей с каждой страны
-            if (!userNat.includes(element.nat)) { 
-                userNat.push(element.nat);
-                userNatLenght = user.filter(item => item.nat === element.nat);
+			//определяем количество пользователей с каждой страны
+            if (!userNat.includes(element.nat)) { //определяем, содержит ли массив  элемент nat, возвращая  true 
+                userNat.push(element.nat);//добавляем элементы в конец массива и возвращаем новую длину массива
+                userNatLenght = user.filter(item => item.nat === element.nat);//фильтруем массив 'user' и возвращаем только тех пользователей, у которых есть свойство 'nat' со значение 'true'
                 listNat += `
-								<div class='users__stats'> ${userNat[indexNat++] + ` - ` + userNatLenght.length} users</div>
-								`;
+							<div class='users__stats'> ${userNat[indexNat++] + ` - ` + userNatLenght.length} users</div>
+							`;
             }
         });
 		
@@ -141,7 +142,7 @@ class Users {
         } else if (this.userMan.length < this.userWoman.length) {
             compareGender = 'More women than men';
         }
-		//выводим статусы ответа: сколько всего пользователей,сколько мужчин, сколько женщин, кого больше
+		//выводим статистику: сколько всего пользователей,сколько мужчин, сколько женщин, кого больше
         let listStats = `
                             <div class='users__stats stats_users '>Amount of users : ${user.length}</div>
                             <div class='users__stats stats_users'>Man : ${this.userMan.length}</div>
@@ -149,9 +150,9 @@ class Users {
                             <div class='users__stats stats_users'>${compareGender}</div>
                         `;
 
-        userGrid.push(list);
-        userGrid.push(listStats);
-        userGrid.push(listNat);
+        userGrid.push(list);//присоединяет значения к массиву userGrid
+        userGrid.push(listStats);//присоединяет значения к массиву userGrid
+        userGrid.push(listNat);//присоединяет значения к массиву userGrid
 
         this.$users.html(userGrid.join('')); //возвращает json обращенный в объект 
     }
