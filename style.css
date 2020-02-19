@@ -22,6 +22,41 @@ html {
 	background: url(http://hello-site.ru//main/images/preloads/spinning-circles.svg) center center no-repeat;
 	background-size:50px;
 }
+._hide .sort-form{
+ display: none;
+}
+.sort-form{
+	display: flex;
+    justify-content: left;
+	padding-top:25px;
+}
+
+.sort-form__input{
+  border: 1px solid #1067A1;
+  padding: 15px 20px;
+  border-radius: 10px;
+  min-width: 280px;
+ }
+.user-sort{
+  background-color: #FDF5E6;
+  color: #000;
+  border: 1px solid #1067A1;
+  cursor: pointer;
+  padding: 15px 20px;
+  margin:7px;
+  border-radius: 10px;
+  transition: all 300ms ease;
+}
+
+.name{
+  background-color: #1067A1;
+}
+.male{
+  background-color: #0000ff;
+}
+.female{
+  background-color: #fc0fc0;
+}
 
 .container {
 	max-width: 1420px;
@@ -43,21 +78,20 @@ html {
 	min-width: 200px;
 	max-width: 300px;
 	width: 100%;
+	font-weight: 600;
     overflow: hidden;
     margin: 15px 10px;
-    font-weight: 600;
+   
 }
 .user__wrapper{
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: all 300ms ease;
   align-items: center;
   padding: 10px 20px;
   box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2);
   background-color: #FDF5E6;
 }
-
 .user:hover {
   box-shadow: 0 8px 20px 0 rgba(0,0,0,0.2);
 }
@@ -78,11 +112,9 @@ html {
   width: 100%;
 }
 .user__name{
-  font-weight: 600;
   text-align: center;
 }
 .user__gender{
-  font-weight: 300;
   text-align: center;
   padding: 5px;
 }
@@ -104,15 +136,17 @@ html {
   text-align: left;
   padding: 10px;
 }
-
 .user__birthday{
   font-weight: 300;
   font-size: 15px;
- 
 }
 .user__registration{
   font-weight: 300;
   font-size: 15px;
+}
+.user__national{
+	font-size: 15px;
+	text-align: center;
 }
 .users__stats {
     width: 100%;
@@ -130,7 +164,6 @@ html {
 	font-size: 25px;
 	font-weight:bold;
 }
-
 .button {
     top: 50%;
     left: 50%;
@@ -144,7 +177,7 @@ html {
     background-color: #1067A1;
     color: #ffffff;
     border: none;
-    border-radius: 7px;
+    border-radius: 15px;
     position: absolute;
 	z-index:2;
 }
@@ -159,10 +192,7 @@ html {
 .button.load-end {
     opacity: 0;
 }
-.button.load::before {
-    opacity: 1;
-    animation: spin 7s infinite ease;
-}
+
 .button.error {
    background-color: rgb(202, 51, 51);
    animation: load 1s reverse;
@@ -188,6 +218,15 @@ html {
 }
 
 
+@keyframes show {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 @keyframes load {
     0% {
         font-size: 0;
@@ -204,6 +243,4 @@ html {
         width: 60px;
     }
 }
-
-
 
