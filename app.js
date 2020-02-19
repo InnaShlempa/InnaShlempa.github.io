@@ -188,7 +188,7 @@ class Users {
 						.includes(event.target.value.toLowerCase());//проверяем, содержит ли строка символы  в нижним регистре и возвращаем, true или false, запускается после каждого ввода символа
                 });
 
-                this.initGrid(this.search);
+                this.initGrid(this.searchArray);
             }, 250);
         });
     }
