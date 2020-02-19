@@ -5,14 +5,18 @@ class Users {
         this.$profile = $profile;
         this.$button = this.$profile.find('[data-users-load]');
         this.$users = this.$profile.find('[data-users]');
-        this.usersLoad();
+		this.$search = this.$profile.find('[data-search]');
+        this.$sortName = this.$profile.find('[data-sort-name]');
+		this.$sortGender = this.$profile.find('[data-sort-gender]');
+		
+		this.usersLoad();
     }
 
     usersLoad() {//при клике на кнопку запускается прелоадер
         this.$button.on('click', () => {
             this.preloader(true)
-
-            fetch(`https://randomuser.me/api/?results=${this.getRandom(0, 100)}`)
+			
+            fetch(`https://randomuser.me/api/?results=${this.getRandom(0, 100)}`)//получаем данные,Fetch возвращает промис
 			
 			/*конвертируем получение данные с помощью метода response.json в json, 
 			этот метод возвращает promise, который, когда получен ответ, 
@@ -34,13 +38,16 @@ class Users {
 				  
                 setTimeout(() => { //время ожидания прелоадера до загрузки пользователей
                     this.preloader(false, 'load-end')
-                    this.initGrid(this.array);                                    
+					this.$profile.removeClass('_hide');
+                    this.initGrid(this.array);  
+					
+                    this.initFilter();
                 }, 2000)
-            })
+            })		
+			//.catch(error => console.log('error is', error))
 			.catch(() => this.preloader(false, 'error'));//если ошибка,то на прелоадер вешаем класс error
         })
-    }
-	
+    }	
 	preloader(state, type) {
 			if (state) {
 				this.$button.addClass('preload');//на кнопку вешаем класс preload
@@ -58,8 +65,6 @@ class Users {
         }
         return random;
     }
-	
-	
 	setGender(element) {
 			if (element.gender === 'female') {
 				this.userWoman.push(element);// если это женский  пол, то добавляем элементы в масив userWoman
@@ -96,7 +101,7 @@ class Users {
 											${element.name.last}                                
 										</div>
 										<div class='user__gender'>
-											${element.gender}
+											Gender: ${element.gender}
 										</div>
 										<div class='user__phone'>
 											${element.phone}
@@ -115,7 +120,10 @@ class Users {
 										</div>
 										<div class='user__registration'>
 											Date of Registered - ${new Date(element.registered.date).toLocaleDateString()}
-										</div>									
+										</div>	
+										<div class="user__national">
+											National - ${element.nat}
+										</div>										
 									</div>
 								</div>
                             </div>
@@ -156,6 +164,97 @@ class Users {
 
         this.$users.html(userGrid.join('')); //возвращает json обращенный в объект 
     }
+	
+	initFilter() {
+        this.initSearch();
+        this.initSortName(this.array);
+		this.initSortGender(this.array);
+	
+    }
+	initSearch() {
+        let searchClear;//переменная для хранения значения, возвращаемого setTimeout()
+
+        this.$search.on('keyup', (event) => {
+            clearTimeout(searchClear);//отменяем ранее установленный вызов функции setTimeout()
+
+            searchClear = setTimeout(() => {//Значение идентификатора, возвращаемое setTimeout(), используется в качестве параметра для метода clearTimeout().
+                this.searchArray = this.array.filter(element => {// создаём новый массив searchArray со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции.
+                    return this.searchConfig(
+                        element.name.first, 
+                        element.name.last, 
+                        element.phone, 
+                        element.email)
+						.toLowerCase()//если false,то преобразовуем и возвращаем значение строки в нижнем регистре,это дедает регистр нечувствительным к регистру(допускается поиск по запросу "john" "John" "JOHN"
+						.includes(event.target.value.toLowerCase());//проверяем, содержит ли строка символы  в нижним регистре и возвращаем, true или false, запускается после каждого ввода символа
+                });
+
+                this.initGrid(this.search);
+            }, 250);
+        });
+    }
+
+    searchConfig(...search) {//с помощью оператора расширения  вставляем массив в функцию
+        return search.join(' ');// создаем и возвращаем новую строку путем конкатенации всех элементов в массиве
+    }
+	initSortGender(array) {
+        this.sorting = false;//указываем статус сортировки false
+        this.sortArray = array;
+
+        this.$sortGender.on('click', () => {
+            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
+                this.sorting = true
+								
+                this.$sortGender.removeClass('female');
+				this.$sortGender.addClass('male');//добавляем класс male
+                this.sortArray = array.sort((a,b) => {//сравниваем два элемента a,b
+                    return b.gender.localeCompare(a.gender);//сравниваем две строки,localeCompare()возвращает число,-1, b сортируется до a, (то есть мужчины)
+                });
+                this.initGrid(this.sortArray);//формируем наш отсортированый масив
+
+            } else  {
+                this.sorting = false
+				
+                this.$sortGender.removeClass('male');//удаляем класс male
+				this.$sortGender.addClass('female');//добавляем класс female
+			
+				this.sortArray = array.sort((a,b) => {
+                    return a.gender.localeCompare(b.gender);//1, а сортируется до b, (то есть женщиы)
+                });		
+                this.initGrid(this.sortArray);	//формируем наш отсортированый масив		
+            }			
+        });		
+    }	
+    initSortName(array) {
+        this.sorting = false;//статус сортировки false
+        this.sortArray = array;
+
+        this.$sortName.on('click', () => {
+            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
+                this.sorting = true
+				
+				this.$sortName.removeClass('name');
+                this.$sortName.addClass('name');
+				
+                this.sortArray = array.sort((a,b) => {
+                    return a.name.first.localeCompare(b.name.first);
+					return a.name.last.localeCompare(b.name.last);
+					return b.gender.localeCompare(a.gender);
+                });
+                this.initGrid(this.sortArray);//формируем наш отсортированый масив
+            } else {
+                this.sorting = false
+
+                this.$sortName.removeClass('name');
+				
+                this.sortArray = array.sort((a,b) => {
+                    return b.name.first.localeCompare(a.name.first);
+					return b.name.last.localeCompare(a.name.last);
+					return a.gender.localeCompare(b.gender);					
+                });
+                this.initGrid(this.sortArray);//формируем наш отсортированый масив
+            }
+        });
+    }	
 }
 
 new Users($('.profile'));
