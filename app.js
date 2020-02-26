@@ -191,9 +191,10 @@ class Users {
         this.sortArray = array;
 
         this.$sortGender.on('click', (event) => {
+			event.preventDefault()
             if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
-				event.preventDefault()
-			   this.sorting = true
+				
+				this.sorting = true
                 this.$sortGender.removeClass('female');
 				this.$sortGender.addClass('male');//добавляем класс male
 				
@@ -220,8 +221,8 @@ class Users {
         this.sortArray = array;
 
         this.$sortName.on('click', (event) => {
+			event.preventDefault()
             if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
-                event.preventDefault()
 				this.sorting = true
 				
 				this.$sortName.removeClass('name');
