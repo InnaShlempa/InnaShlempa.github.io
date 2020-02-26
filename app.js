@@ -194,7 +194,7 @@ class Users {
             if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
                 this.sorting = true
 				
-				this.$sortName.removeClass('name');
+				//this.$sortName.removeClass('name');
                 this.$sortName.addClass('name');
 				
                 this.sortArray = array.sort((a,b) => {
