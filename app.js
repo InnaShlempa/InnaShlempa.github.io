@@ -148,11 +148,11 @@ class Users {
                             <div class='users__stats stats_users'>${compareGender}</div>
                         `;
 
-        userGrid.push(list);//присоединяет значения к массиву userGrid
-        userGrid.push(listStats);//присоединяет значения к массиву userGrid
-        userGrid.push(listNat);//присоединяет значения к массиву userGrid
+        userGrid.push(list);//присоединяем значения к массиву userGrid
+        userGrid.push(listStats);//присоединяем значения к массиву userGrid
+        userGrid.push(listNat);//присоединяем значения к массиву userGrid
 
-        this.$users.html(userGrid.join('')); //возвращает json обращенный в объект 
+        this.$users.html(userGrid.join('')); //возвращаем json обращенный в объект 
     }
 	
 	initFilter() {
@@ -186,38 +186,6 @@ class Users {
     searchConfig(...search) {//с помощью оператора расширения  вставляем массив в функцию
         return search.join(' ');// создаем и возвращаем новую строку путем конкатенации всех элементов в массиве
     }
-	initSortName(array) {
-        this.sorting = false;//статус сортировки false
-        this.sortArray = array;
-
-        this.$sortName.on('click', () => {
-            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
-                this.sorting = true
-				
-				//this.$sortName.removeClass('name');
-                this.$sortName.addClass('name');
-				
-                this.sortArray = array.sort((a,b) => {
-                    return a.name.first.localeCompare(b.name.first);
-					return a.name.last.localeCompare(b.name.last);
-					return b.gender.localeCompare(a.gender);
-                });
-                this.initGrid(this.sortArray);//формируем отсортированый масив
-            } else {
-                this.sorting = false
-
-                this.$sortName.removeClass('name');
-				
-                this.sortArray = array.sort((a,b) => {
-                    return b.name.first.localeCompare(a.name.first);
-					return b.name.last.localeCompare(a.name.last);
-					return a.gender.localeCompare(b.gender);					
-                });
-                this.initGrid(this.sortArray);//формируем отсортированый масив
-            }
-        });
-    }	
-
 	initSortGender(array) {
         this.sorting = false;//указываем статус сортировки false
         this.sortArray = array;
@@ -247,13 +215,43 @@ class Users {
             }			
         });		
     }	
-	
+	initSortName(array) {
+        this.sorting = false;//статус сортировки false
+        this.sortArray = array;
+
+        this.$sortName.on('click', (event) => {
+            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
+                this.sorting = true
+				event.preventDefault()
+				this.$sortName.removeClass('name');
+                this.$sortName.addClass('name');
+				
+                this.sortArray = array.sort((a,b) => {
+                    return a.name.first.localeCompare(b.name.first);
+					return a.name.last.localeCompare(b.name.last);
+					return b.gender.localeCompare(a.gender);
+                });
+                this.initGrid(this.sortArray);//формируем отсортированый масив
+            } else {
+                this.sorting = false
+
+                this.$sortName.removeClass('name');
+				
+                this.sortArray = array.sort((a,b) => {
+                    return b.name.first.localeCompare(a.name.first);
+					return b.name.last.localeCompare(a.name.last);
+					return a.gender.localeCompare(b.gender);					
+                });
+                this.initGrid(this.sortArray);//формируем отсортированый масив
+            }
+        });
+    }	
+
 	initsortClear() {
-		
-	this.$sortClear.on('click', () => {
-        this.$sortName.removeClass('name');
-		this.$sortGender.removeClass('male female');
-		});
+		this.$sortClear.on('click', () => {
+			this.$sortName.removeClass('name');
+			this.$sortGender.removeClass('male female');
+			});
     }
 }
 
