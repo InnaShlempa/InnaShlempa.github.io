@@ -1,6 +1,7 @@
 'use strict';
 
 class Users {
+	
     constructor($profile) {
         this.$profile = $profile;
         this.$button = this.$profile.find('[data-users-load]');
@@ -8,6 +9,7 @@ class Users {
 		this.$search = this.$profile.find('[data-search]');
         this.$sortName = this.$profile.find('[data-sort-name]');
 		this.$sortGender = this.$profile.find('[data-sort-gender]');
+		this.$sortClear = this.$profile.find('[data-sort-clear]');
 		
 		this.usersLoad();
     }
@@ -16,8 +18,7 @@ class Users {
         this.$button.on('click', () => {
             this.preloader(true)
 			
-            fetch(`https://randomuser.me/api/?results=${this.getRandom(0, 100)}`)//получаем данные,Fetch возвращает промис
-			
+            fetch(`https://randomuser.me/api/?results=${this.getRandom()}`)//получаем данные,Fetch возвращает промис
 			/*конвертируем получение данные с помощью метода response.json в json, 
 			этот метод возвращает promise, который, когда получен ответ, 
 			вызывает коллбэк с результатом парсинга ответа в json.  */
@@ -28,19 +29,15 @@ class Users {
 						this.array = response.results;
 						console.log('users', this.array)//вывод объекта пользователей в консоль
 						})				
-					} else {//если статус ответа не ок, то выполняем Promise.reject, который возвращает отклонённый
-					//promise со статусом  ошибки
+					} else {//если статус ответа не ок, то выполняем Promise.reject, который возвращает отклонённый promise со статусом  ошибки
 					   return Promise.reject({
-							status: response.status,
-												
+							status: response.status,											
 						});				
-				  }
-				  
+				  }				  
                 setTimeout(() => { //время ожидания прелоадера до загрузки пользователей
                     this.preloader(false, 'load-end')
 					this.$profile.removeClass('_hide');
-                    this.initGrid(this.array);  
-					
+                    this.initGrid(this.array);  				
                     this.initFilter();
                 }, 2000)
             })		
@@ -55,16 +52,9 @@ class Users {
 				this.$button.addClass(type);
 			}
 		}
-   
-    getRandom(min, max) {
-        let random;
-        if (min || max) {
-            random = Math.floor(Math.random() * (max - min) + min);//максимум не включается, минимум включается
-        } else {
-            random = Math.floor(Math.random() * 100);
-        }
-        return random;
-    }
+    getRandom() {
+	   return Math.floor(Math.random() * 101)//возвращает случайное целое число от 0 до 100, Math.random() возвращает число ниже 1, Math.floor() округляет до ближайшего меньшего целого.
+	}
 	setGender(element) {
 			if (element.gender === 'female') {
 				this.userWoman.push(element);// если это женский  пол, то добавляем элементы в масив userWoman
@@ -169,6 +159,7 @@ class Users {
         this.initSearch();
         this.initSortName(this.array);
 		this.initSortGender(this.array);
+		this.initsortClear();
 	
     }
 	initSearch() {
@@ -187,7 +178,6 @@ class Users {
 						.toLowerCase()//если false,то преобразовуем и возвращаем значение строки в нижнем регистре,это дедает регистр нечувствительным к регистру(допускается поиск по запросу "john" "John" "JOHN"
 						.includes(event.target.value.toLowerCase());//проверяем, содержит ли строка символы  в нижним регистре и возвращаем, true или false, запускается после каждого ввода символа
                 });
-
                 this.initGrid(this.searchArray);
             }, 250);
         });
@@ -196,35 +186,7 @@ class Users {
     searchConfig(...search) {//с помощью оператора расширения  вставляем массив в функцию
         return search.join(' ');// создаем и возвращаем новую строку путем конкатенации всех элементов в массиве
     }
-	initSortGender(array) {
-        this.sorting = false;//указываем статус сортировки false
-        this.sortArray = array;
-
-        this.$sortGender.on('click', () => {
-            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
-                this.sorting = true
-								
-                this.$sortGender.removeClass('female');
-				this.$sortGender.addClass('male');//добавляем класс male
-                this.sortArray = array.sort((a,b) => {//сравниваем два элемента a,b
-                    return b.gender.localeCompare(a.gender);//сравниваем две строки,localeCompare()возвращает число,-1, b сортируется до a, (то есть мужчины)
-                });
-                this.initGrid(this.sortArray);//формируем наш отсортированый масив
-
-            } else  {
-                this.sorting = false
-				
-                this.$sortGender.removeClass('male');//удаляем класс male
-				this.$sortGender.addClass('female');//добавляем класс female
-			
-				this.sortArray = array.sort((a,b) => {
-                    return a.gender.localeCompare(b.gender);//1, а сортируется до b, (то есть женщиы)
-                });		
-                this.initGrid(this.sortArray);	//формируем наш отсортированый масив		
-            }			
-        });		
-    }	
-    initSortName(array) {
+	initSortName(array) {
         this.sorting = false;//статус сортировки false
         this.sortArray = array;
 
@@ -240,7 +202,7 @@ class Users {
 					return a.name.last.localeCompare(b.name.last);
 					return b.gender.localeCompare(a.gender);
                 });
-                this.initGrid(this.sortArray);//формируем наш отсортированый масив
+                this.initGrid(this.sortArray);//формируем отсортированый масив
             } else {
                 this.sorting = false
 
@@ -251,10 +213,48 @@ class Users {
 					return b.name.last.localeCompare(a.name.last);
 					return a.gender.localeCompare(b.gender);					
                 });
-                this.initGrid(this.sortArray);//формируем наш отсортированый масив
+                this.initGrid(this.sortArray);//формируем отсортированый масив
             }
         });
     }	
+
+	initSortGender(array) {
+        this.sorting = false;//указываем статус сортировки false
+        this.sortArray = array;
+
+        this.$sortGender.on('click', () => {
+            if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
+                this.sorting = true
+								
+                this.$sortGender.removeClass('female');
+				this.$sortGender.addClass('male');//добавляем класс male
+				
+                this.sortArray = array.sort((a,b) => {//сравниваем два элемента a,b
+                    return b.gender.localeCompare(a.gender);//сравниваем две строки,localeCompare()возвращает число,-1, b сортируется до a, (то есть мужчины)
+                });
+                this.initGrid(this.sortArray);//формируем отсортированый масив
+
+            } else  {
+                this.sorting = false
+				
+                this.$sortGender.removeClass('male');//удаляем класс male
+				this.$sortGender.addClass('female');//добавляем класс female
+							
+				this.sortArray = array.sort((a,b) => {
+                    return a.gender.localeCompare(b.gender);//1, а сортируется до b, (то есть женщиы)
+                });		
+                this.initGrid(this.sortArray);	//формируем отсортированый масив		
+            }			
+        });		
+    }	
+	
+	initsortClear() {
+		
+	this.$sortClear.on('click', () => {
+        this.$sortName.removeClass('name');
+		this.$sortGender.removeClass('male female');
+		});
+    }
 }
 
 new Users($('.profile'));
