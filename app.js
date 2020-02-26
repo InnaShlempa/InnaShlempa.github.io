@@ -190,10 +190,10 @@ class Users {
         this.sorting = false;//указываем статус сортировки false
         this.sortArray = array;
 
-        this.$sortGender.on('click', () => {
+        this.$sortGender.on('click', (event) => {
             if (!this.sorting) {//если sorting = false, то меняем на true и выполняем сортировку
                 this.sorting = true
-								
+				event.preventDefault()
                 this.$sortGender.removeClass('female');
 				this.$sortGender.addClass('male');//добавляем класс male
 				
