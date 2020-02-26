@@ -250,7 +250,8 @@ class Users {
     }	
 
 	initsortClear() {
-		this.$sortClear.on('click', () => {
+		this.$sortClear.on('click', (event) => {
+			event.preventDefault()
 			this.$sortName.removeClass('name');
 			this.$sortGender.removeClass('male female');
 			});
