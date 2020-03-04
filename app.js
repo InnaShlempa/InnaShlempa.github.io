@@ -12,7 +12,8 @@ class Users {
 		this.$sortGender = this.$profile.find('[data-sort-gender]');
 		this.$sortClear = this.$profile.find('[data-sort-clear]');
 		this.$filterMale = this.$profile.find('[data-male]');
-		this.$filterFemale = this.$profile.find('[data-female]');		
+		this.$filterFemale = this.$profile.find('[data-female]');
+		this.$filterAll = this.$profile.find('[data-all]');		
 		this.$filterAge35 = this.$profile.find('[data-age35]');
 		this.$filterAge3540 = this.$profile.find('[data-age3540]');
 		this.$filterAge4045 = this.$profile.find('[data-age4045]');
@@ -188,16 +189,20 @@ class Users {
                 this.filterGender = this.array.filter(element => element.gender==='female')  
 				this.initGrid(this.filterGender);//формируем масив     					           		
         });	
+		this.$filterAll.on('click', () => { // фильтруем масив, ищем только тех пользователей, которые имееют element.gender='female'    
+                this.filterGender = this.array.filter(element => element.gender)  
+				this.initGrid(this.filterGender);//формируем масив     					           		
+        });
 		this.$filterAge35.on('click', () => {//фильтруем масив, ищем только тех пользователей, которые имееют element.dob.age<35     
                 this.filterAge = this.array.filter(element => element.dob.age < 35)              
                 this.initGrid(this.filterAge);//формируем масив     			
         });	
 		this.$filterAge3540.on('click', () => {      
-                this.filterAge = this.array.filter(element => element.dob.age > 35 < 40)   
+                this.filterAge = this.array.filter(element => element.dob.age > 35 && element.dob.age < 40)   
                 this.initGrid(this.filterAge);//формируем масив     			
         });
 		this.$filterAge4045.on('click', () => {      
-                this.filterAge = this.array.filter(element => element.dob.age > 40 < 45)              
+                this.filterAge = this.array.filter(element => element.dob.age > 40 && element.dob.age < 45)              
                 this.initGrid(this.filterAge);//формируем масив     			
         });	
 		this.$filterAge45.on('click', () => { //фильтруем масив, ищем только тех пользователей, которые имееют element.dob.age>45      
@@ -205,9 +210,6 @@ class Users {
                 this.initGrid(this.filterAge);//формируем масив     			
         });	
 	}
-
-	
-
 
 	initSearch() {
         let searchClear;//переменная для хранения значения, возвращаемого setTimeout()
