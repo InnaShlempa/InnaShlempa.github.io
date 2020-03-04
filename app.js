@@ -13,7 +13,8 @@ class Users {
 		this.$sortClear = this.$profile.find('[data-sort-clear]');
 		this.$filterMale = this.$profile.find('[data-male]');
 		this.$filterFemale = this.$profile.find('[data-female]');
-		this.$filterAll = this.$profile.find('[data-all]');		
+		this.$filterAll = this.$profile.find('[data-all]');	
+		this.$filterAgeAll = this.$profile.find('[data-age-all]');				
 		this.$filterAge35 = this.$profile.find('[data-age35]');
 		this.$filterAge3540 = this.$profile.find('[data-age3540]');
 		this.$filterAge4045 = this.$profile.find('[data-age4045]');
@@ -178,7 +179,7 @@ class Users {
     }
 	
 	initFilterUsers(array){	
-		this.filterGender= array;//масив для хранения результата  filterGender
+		this.filterUsers= array;//масив для хранения результата  filterGender
 		this.filterAge= array;//масив для хранения результата filterAge
 			
 		this.$filterMale.on('click', () => { //фильтруем масив, ищем только тех пользователей, которые имееют element.gender='male'
@@ -209,6 +210,10 @@ class Users {
                 this.filterAge = this.array.filter(element => element.dob.age > 45)              
                 this.initGrid(this.filterAge);//формируем масив     			
         });	
+		this.$filterAgeAll.on('click', () => { // фильтруем масив, ищем только тех пользователей, которые имееют element.gender='female'    
+                this.filterAge = this.array.filter(element => element.dob.age)  
+				this.initGrid(this.filterAge);//формируем масив     					           		
+        });
 	}
 
 	initSearch() {
@@ -300,7 +305,8 @@ class Users {
 		this.$sortClear.on('click', (event) => {
 			event.preventDefault()
 			this.$sortName.removeClass('name');
-			this.$sortGender.removeClass('male female');
+			this.$sortGender.removeClass('male female');		
+			//this.$sortGender.removeClass('male female');					
 			});
     }
 	
