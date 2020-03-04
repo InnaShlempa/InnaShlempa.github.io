@@ -15,21 +15,111 @@
                 </div>          
         </div>
 		<div class="container" >			
-				<div class="sort-form  ">
-					<form action="#">
-						
-							<input type="text" class="sort-form__input" placeholder="Search" data-search>
-							<button class="user-sort" data-sort-name>По алфавиту</button>
-							<button class="user-sort" data-sort-gender>По половому признаку</button>	
-							<button class="user-sort" data-sort-clear>X</button>							
-					</form>
-				</div>
-		
+			<div class="sort-form  ">
+				<form action="#">					
+					<input type="text" class="sort-form__input" placeholder="Поиск по номеру телефон, ФИО, email" data-search>
+					<button class="user-sort" data-sort-name>По алфавиту</button>
+					<button class="user-sort" data-sort-gender>По половому признаку</button>	
+					<button class="user-sort" data-sort-clear>X</button>							
+				</form>
+			</div>
+			
+	<div class="filter_users">
+		<button class="filter">Половой признак</button>
+			<div class="panel">
+				<label class="filter-user">Мужчины
+					<input type="radio" data-male name="radio">
+						<div class="checkmark"></div>
+				</label>
+				<label class="filter-user" >Женщины
+					<input type="radio" data-female name="radio">
+					<div class="checkmark"></div>
+				</label>
+			</div>		
+		<button class="filter">Возраст</button>			
+			<div class="panel">
+				<label class="filter-user">младше 35
+					<input type="radio" data-age35 name="radio">
+						<div class="checkmark"></div>
+				</label>
+				<label class="filter-user">от 35 до 40
+					<input type="radio"data-age3540  name="radio">
+						<div class="checkmark"></div>
+				</label>
+				<label class="filter-user">от 40 до 45
+					<input type="radio" data-age4045 name="radio">
+						<div class="checkmark"></div>
+				</label>
+				<label class="filter-user">старше 45
+					<input type="radio" data-age45   name="radio">
+						<div class="checkmark"></div>
+				</label>
+			</div>
+    </div> 					
 			<div class="users" data-users>
-			</div>				
+			
+			</div>		
+			<div class="center ">
+				<div class="pagination">
+					<a href="#">«</a>
+					<a href="#">1</a>
+					<a href="#" class="active">2</a>
+					<a href="#">3</a>
+					<a href="#">»</a>
+				 </div>
+			</div>		
+			<div class="stats" data-stats>
+			</div>
+			<div class="scroll_panel">
+				<a href="#" class="scroll_top"></a>
+				<a href="#" class="scroll_bottom"><a>
+			</div>		
 		</div>    
     </div>
-   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="app.js"></script>
+
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   <script src="app.js"></script>
+	
+	
+	<script>
+		let filter = document.getElementsByClassName("filter");
+		let i;
+		for (i = 0; i < filter.length; i++) {
+		  filter[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			let panel = this.nextElementSibling;
+			if (panel.style.display === "block") {
+			  panel.style.display = "none";
+			} else {
+			  panel.style.display = "block";
+			}
+		  });
+		}
+	</script>
+	
+	<script>
+		$(function(){
+			$(window).scroll(function(){
+				if($(window).scrollTop() > 100) {
+					$('.scroll_top').show();
+				} else {
+					$('.scroll_top').hide();
+				}
+			});
+			$('.scroll_top').click(function(){
+				$('html, body').animate({scrollTop: 0}, 950);
+				return false;
+			});
+			$('.scroll_bottom').click(function(){
+				$('html, body').animate({scrollTop: $(document).height() - $(window).height()}, 950);
+				return false;
+			});
+		});
+	</script>
+	
+	
+	
+	
+		
 </body>
 </html>
