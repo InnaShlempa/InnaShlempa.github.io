@@ -6,10 +6,18 @@ class Users {
         this.$profile = $profile;
         this.$button = this.$profile.find('[data-users-load]');
         this.$users = this.$profile.find('[data-users]');
+		this.$stats = this.$profile.find('[data-stats]');
 		this.$search = this.$profile.find('[data-search]');
         this.$sortName = this.$profile.find('[data-sort-name]');
 		this.$sortGender = this.$profile.find('[data-sort-gender]');
 		this.$sortClear = this.$profile.find('[data-sort-clear]');
+		this.$filterMale = this.$profile.find('[data-male]');
+		this.$filterFemale = this.$profile.find('[data-female]');		
+		this.$filterAge35 = this.$profile.find('[data-age35]');
+		this.$filterAge3540 = this.$profile.find('[data-age3540]');
+		this.$filterAge4045 = this.$profile.find('[data-age4045]');
+		this.$filterAge45 = this.$profile.find('[data-age45]');
+		this.$showMore = this.$profile.find('[data-show-more]');
 		
 		this.usersLoad();
     }
@@ -67,7 +75,8 @@ class Users {
     initGrid(user) {
         let userGrid = []; //инициализируем переменную, содержащую масив, который хранит сетку профилей пользователей
         let list = '';//инициализируем переменную, содержащую строку, в которой хранится разметка html профиля и выражения,обернутые в ${…}
-
+		
+		let userStats = [];
         let userNat = [];  //инициализируем переменную, содержащую масив национальности пользователей
         let userNatLenght = [];//инициализируем переменную, содержащую масив  пользоватей с одной страны
 		
@@ -118,11 +127,13 @@ class Users {
 								</div>
                             </div>
                         `;
-
+				
+					
+    
             this.setGender(element);
 			
 			//определяем количество пользователей с каждой страны
-            if (!userNat.includes(element.nat)) { //определяем, содержит ли массив  элемент nat, возвращая  true 
+         if (!userNat.includes(element.nat)) { //определяем, содержит ли массив  элемент nat, возвращая  true 
                 userNat.push(element.nat);//добавляем элементы в конец массива и возвращаем новую длину массива
                 userNatLenght = user.filter(item => item.nat === element.nat);//фильтруем массив 'user' и возвращаем только тех пользователей, у которых есть свойство 'nat' со значение 'true'
                 listNat += `
@@ -131,7 +142,7 @@ class Users {
             }
         });
 		
-		//сравнение кого больше мужчин или женщмн
+		//сравнение кого больше мужчин или женщин
 		let compareGender;
         if (this.userMan.length === this.userWoman.length) { // если длина масив userMan = длине масива userWoman, то равное количество
             compareGender = 'Amount of men and women is equal';
@@ -149,19 +160,55 @@ class Users {
                         `;
 
         userGrid.push(list);//присоединяем значения к массиву userGrid
-        userGrid.push(listStats);//присоединяем значения к массиву userGrid
-        userGrid.push(listNat);//присоединяем значения к массиву userGrid
+        userStats.push(listStats);//присоединяем значения к массиву userStats
+        userStats.push(listNat);//присоединяем значения к массиву userStats
 
         this.$users.html(userGrid.join('')); //возвращаем json обращенный в объект 
+		this.$stats.html(userStats.join('')); 
     }
 	
 	initFilter() {
         this.initSearch();
         this.initSortName(this.array);
 		this.initSortGender(this.array);
-		this.initsortClear();
-	
+		this.initSortClear();
+		this.initFilterUsers(this.array);
+		
     }
+	
+	initFilterUsers(array){	
+		this.filterGender= array;//масив для хранения результата  filterGender
+		this.filterAge= array;//масив для хранения результата filterAge
+			
+		this.$filterMale.on('click', () => { //фильтруем масив, ищем только тех пользователей, которые имееют element.gender='male'
+                this.filterGender = this.array.filter(element => element.gender==='male')     
+				this.initGrid(this.filterGender);//формируем масив     					                			
+        });	
+		this.$filterFemale.on('click', () => { // фильтруем масив, ищем только тех пользователей, которые имееют element.gender='female'    
+                this.filterGender = this.array.filter(element => element.gender==='female')  
+				this.initGrid(this.filterGender);//формируем масив     					           		
+        });	
+		this.$filterAge35.on('click', () => {//фильтруем масив, ищем только тех пользователей, которые имееют element.dob.age<35     
+                this.filterAge = this.array.filter(element => element.dob.age < 35)              
+                this.initGrid(this.filterAge);//формируем масив     			
+        });	
+		this.$filterAge3540.on('click', () => {      
+                this.filterAge = this.array.filter(element => element.dob.age > 35 < 40)   
+                this.initGrid(this.filterAge);//формируем масив     			
+        });
+		this.$filterAge4045.on('click', () => {      
+                this.filterAge = this.array.filter(element => element.dob.age > 40 < 45)              
+                this.initGrid(this.filterAge);//формируем масив     			
+        });	
+		this.$filterAge45.on('click', () => { //фильтруем масив, ищем только тех пользователей, которые имееют element.dob.age>45      
+                this.filterAge = this.array.filter(element => element.dob.age > 45)              
+                this.initGrid(this.filterAge);//формируем масив     			
+        });	
+	}
+
+	
+
+
 	initSearch() {
         let searchClear;//переменная для хранения значения, возвращаемого setTimeout()
 
@@ -197,9 +244,8 @@ class Users {
 				this.sorting = true
                 this.$sortGender.removeClass('female');
 				this.$sortGender.addClass('male');//добавляем класс male
-				
                 this.sortArray = array.sort((a,b) => {//сравниваем два элемента a,b
-                    return b.gender.localeCompare(a.gender);//сравниваем две строки,localeCompare()возвращает число,-1, b сортируется до a, (то есть мужчины)
+                    return b.gender.localeCompare(a.gender);//сравниваем две строки,localeCompare()возвращает число,-1, b сортируется до a,
                 });
                 this.initGrid(this.sortArray);//формируем отсортированый масив
 
@@ -207,10 +253,9 @@ class Users {
                 this.sorting = false
 				
                 this.$sortGender.removeClass('male');//удаляем класс male
-				this.$sortGender.addClass('female');//добавляем класс female
-							
+				this.$sortGender.addClass('female');//добавляем класс female						
 				this.sortArray = array.sort((a,b) => {
-                    return a.gender.localeCompare(b.gender);//1, а сортируется до b, (то есть женщиы)
+                    return a.gender.localeCompare(b.gender);//1, а сортируется до b,
                 });		
                 this.initGrid(this.sortArray);	//формируем отсортированый масив		
             }			
@@ -249,13 +294,13 @@ class Users {
         });
     }	
 
-	initsortClear() {
+	initSortClear() {
 		this.$sortClear.on('click', (event) => {
 			event.preventDefault()
 			this.$sortName.removeClass('name');
 			this.$sortGender.removeClass('male female');
 			});
     }
+	
 }
-
 new Users($('.profile'));
